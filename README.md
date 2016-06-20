@@ -1,5 +1,7 @@
 # jstyleson
 
+![](https://travis-ci.org/linjackson78/jstyleson.svg?branch=master)
+
 jstyleson is a python library to parse JSON with js-style comments.
 
 JSON by standard does not allow comments, and the python standard json module does not offer options to parse a JSON string with comments. It will not be happy with commented JSON:
