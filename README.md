@@ -1,2 +1,48 @@
-# jstyle-commented-json
-Python library to parse JSON with js-style comments.
+# jstyleson
+
+jstyleson is a python library to parse JSON with js-style comments.
+
+JSON by standard does not allow comments, and the python standard json module does not offer options to parse a JSON string with comments. It will not be happy with commented JSON:
+    
+    import json
+    json_str_with_comments = """{
+        // Single-line comment
+        "foo": "bar"
+        /*
+        Multi-line comment
+         */
+    }
+    """
+    json.loads(json_str_with_comments) # Raise Exception
+
+jstyleson try to make it happy with your js-style commented JSON, by first removing all comments inside, then hand it to the standard json module.
+
+# Installation
+
+`pip install jstyleson`
+
+# Usage
+
+jstyleson provide some wrapper function around the standard json module:
+
+    jstyleson.loads(json_str_with_comments)
+    jstyleson.dumps(dict())
+
+Under the hood, jstyleson do nothing but remove all comments in the JSON string, via the `dispose` function. So you can invoke it manually like this:
+
+`valid_json_str = jstyleson.dispose(json_str_with_comments)`
+
+# Testing
+
+`python setup.py test`
+
+# License
+
+The MIT License (MIT)
+Copyright (c) 2016 linjackson
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
