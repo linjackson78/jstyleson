@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='jstyleson',
     py_modules=['jstyleson'],
-    version='0.0.1',
+    version='0.0.2',
     description='Library to parse JSON with js-style comments.',
     author='linjackson',
     author_email='linjackson78@gmail.com',

@@ -20,8 +20,12 @@ def dispose(json_str):
     ml_comment = False
     quoted = False
 
-    a_setp_from_comment = False
-    a_setp_from_comment_away = False
+    a_step_from_comment = False
+    a_step_from_comment_away = False
+
+    # The depth of array or object we are in
+    array_stack = 0
+    object_stack = 0
 
     former_index = None
 
@@ -31,9 +35,9 @@ def dispose(json_str):
             escaped = False
             continue
 
-        if a_setp_from_comment:  # We have just met a '/'
+        if a_step_from_comment:  # We have just met a '/'
             if char != '/' and char != '*':
-                a_setp_from_comment = False
+                a_step_from_comment = False
                 normal = True
                 continue
 
@@ -53,15 +57,15 @@ def dispose(json_str):
                 escaped = True
 
         elif char == '/':
-            if a_setp_from_comment:
+            if a_step_from_comment:
                 # Now we are in single line comment
-                a_setp_from_comment = False
+                a_step_from_comment = False
                 sl_comment = True
                 normal = False
                 former_index = index - 1
-            elif a_setp_from_comment_away:
+            elif a_step_from_comment_away:
                 # Now we are out of comment
-                a_setp_from_comment_away = False
+                a_step_from_comment_away = False
                 normal = True
                 ml_comment = False
                 for i in range(former_index, index + 1):
@@ -69,27 +73,48 @@ def dispose(json_str):
 
             elif normal:
                 # Now we are just one step away from comment
-                a_setp_from_comment = True
+                a_step_from_comment = True
                 normal = False
 
         elif char == '*':
-            if a_setp_from_comment:
+            if a_step_from_comment:
                 # We are now in multi-line comment
-                a_setp_from_comment = False
+                a_step_from_comment = False
                 ml_comment = True
                 normal = False
                 former_index = index - 1
             elif ml_comment:
-                a_setp_from_comment_away = True
+                a_step_from_comment_away = True
         elif char == '\n':
             if sl_comment:
                 sl_comment = False
                 normal = True
                 for i in range(former_index, index + 1):
                     result_str[i] = ""
+        elif char == '[' and normal:
+            array_stack += 1
+        elif char == ']' and normal:
+            array_stack -= 1
+            _remove_last_comma(result_str, index)
+        elif char == '{' and normal:
+            object_stack += 1
+        elif char == '}' and normal:
+            _remove_last_comma(result_str, index)
+            object_stack -= 1
 
     # Show respect to original input if we are in python2
     return ("" if isinstance(json_str, str) else u"").join(result_str)
+
+
+# There may be performance suffer backtracking the last comma
+def _remove_last_comma(str_list, before_index):
+    i = before_index - 1
+    while str_list[i].isspace() or not str_list[i]:
+        i -= 1
+
+    # This is the first none space char before before_index
+    if str_list[i] == ',':
+        str_list[i] = ''
 
 
 # Below are just some wrapper function around the standard json module.

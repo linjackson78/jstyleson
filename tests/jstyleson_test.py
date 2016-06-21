@@ -13,6 +13,7 @@ json_test_case = """
     "number": 2,
     "foo": "bar", //inline comment
     "array": [1,2, /*comments inside array*/ 3],
+    "nested_casual_array": [1, [2.0, 2.5,], 3, {"key_in_arr": "value_in_arr",},/*trailing comma*/],
     //single line comment
     /*multi
     line
@@ -20,6 +21,14 @@ json_test_case = """
     */
     "object": {
         "key": "中文"
+    },
+    "nested_casual_object": {
+        "key": "中文",
+        "key_in_obj": ["1_in_obj", "2_in_obj",/*trailing comma*/],
+        "casual_object": {
+            "key1": "value1",
+            "key2": "value2",/*trailing comma*/
+        },//trailing comma
     }
     //comment with 中文
 }
@@ -31,8 +40,17 @@ json_expected = {
     "number": 2,
     "foo": "bar",
     "array": [1, 2, 3],
+    "nested_casual_array": [1, [2.0, 2.5], 3, {"key_in_arr": "value_in_arr"}],
     "object": {
         "key": u"中文"
+    },
+    "nested_casual_object": {
+        "key": u"中文",
+        "key_in_obj": ["1_in_obj", "2_in_obj"],
+        "casual_object": {
+            "key1": "value1",
+            "key2": "value2"
+        }
     }
 }
 
