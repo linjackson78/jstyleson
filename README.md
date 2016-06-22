@@ -2,22 +2,22 @@
 
 ![](https://travis-ci.org/linjackson78/jstyleson.svg?branch=master)
 
-jstyleson is a python library to parse JSON with js-style comments.
+jstyleson is a python library to parse JSON with js-style comments. Trailing comma is also supported.
 
-JSON by standard does not allow comments, and the python standard json module does not offer options to parse a JSON string with comments. It will not be happy with commented JSON:
+JSON by standard does not allow comments and trailing comma, and the python standard json module does not offer options to parse such informal JSON.
     
     import json
-    json_str_with_comments = """{
+    informal_json_str = """{
         // Single-line comment
-        "foo": "bar"
+        "foo": "bar", // Behold that trailing comma
         /*
         Multi-line comment
          */
     }
     """
-    json.loads(json_str_with_comments) # Raise Exception
+    json.loads(informal_json_str) # Raise Exception
 
-jstyleson try to make it happy with your js-style commented JSON, by first removing all comments inside, then hand it to the standard json module.
+jstyleson try to make it happy with your js-style commented JSON, by first removing all elements inside (comments and trailing comma), then hand it to the standard json module.
 
 # Installation
 
@@ -26,13 +26,14 @@ jstyleson try to make it happy with your js-style commented JSON, by first remov
 # Usage
 
 jstyleson provide some wrapper function around the standard json module:
+	
+	import jstyleson
+    result_dict = jstyleson.loads(informal_json_str) # OK
+    jstyleson.dumps(result_dict)
 
-    jstyleson.loads(json_str_with_comments)
-    jstyleson.dumps(dict())
+Under the hood, jstyleson do nothing but remove all invalid elements via the `dispose` function. So you can invoke it manually like this:
 
-Under the hood, jstyleson do nothing but remove all comments in the JSON string, via the `dispose` function. So you can invoke it manually like this:
-
-`valid_json_str = jstyleson.dispose(json_str_with_comments)`
+`valid_json_str = jstyleson.dispose(informal_json_str)`
 
 # Testing
 

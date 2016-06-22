@@ -23,10 +23,6 @@ def dispose(json_str):
     a_step_from_comment = False
     a_step_from_comment_away = False
 
-    # The depth of array or object we are in
-    array_stack = 0
-    object_stack = 0
-
     former_index = None
 
     for index, char in enumerate(json_str):
@@ -91,16 +87,9 @@ def dispose(json_str):
                 normal = True
                 for i in range(former_index, index + 1):
                     result_str[i] = ""
-        elif char == '[' and normal:
-            array_stack += 1
-        elif char == ']' and normal:
-            array_stack -= 1
-            _remove_last_comma(result_str, index)
-        elif char == '{' and normal:
-            object_stack += 1
-        elif char == '}' and normal:
-            _remove_last_comma(result_str, index)
-            object_stack -= 1
+        elif char == ']' or char == '}':
+            if normal:
+                _remove_last_comma(result_str, index)
 
     # Show respect to original input if we are in python2
     return ("" if isinstance(json_str, str) else u"").join(result_str)
