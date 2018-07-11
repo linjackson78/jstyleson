@@ -18,6 +18,7 @@ json_test_case = """
     /*multi
     line
     "comment with many "quotes"quotes"quotes"
+    * followed sometime after by a / but that does not end the comment
     */
     "object": {
         "key": "中文"
