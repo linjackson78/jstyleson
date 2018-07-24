@@ -37,6 +37,10 @@ def dispose(json_str):
                 normal = True
                 continue
 
+        if a_step_from_comment_away:  # We have just met a '*'
+            if char != '/':
+                a_step_from_comment_away = False
+
         if char == '"':
             if normal and not escaped:
                 # We are now in a string
