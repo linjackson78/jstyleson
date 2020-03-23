@@ -33,7 +33,7 @@ json_test_case = """
     }
     //comment with 中文
 }
-"""
+//comment without newline character"""
 
 json_expected = {
     "string": "string",
