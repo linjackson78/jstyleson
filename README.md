@@ -32,6 +32,10 @@ jstyleson supports parsing JSON with:
 
 `pip install jstyleson`
 
+OR, using conda:
+
+`conda install -c conda-forge jstyleson`
+
 # Usage
 
 jstyleson provide some wrapper function around the standard json module:
